@@ -1,3 +1,54 @@
+## 踩坑日記
+
+1. **tiny-cuda-nn.vcxproj when building[reference](https://github.com/NVlabs/instant-ngp/discussions/291)**: change your CUDA and Optix version (CUDA11.6 / Optix7.3 runs well)
+
+### prepare env
+
+- An NVIDIA GPU
+- A C++14 capable compiler. The following choices are recommended and have been tested:
+  - Windows: Visual Studio 2019 or 2022
+  - Linux: GCC/G++ 8 or higher
+- A recent version of CUDA
+- CMake v3.21 or higher.
+- (optional) Python 3.7 or higher, OptiX 7.6 or higher, Vulkan SDK for DLSS support
+(這裡可能會有一些坑，後面說明)
+
+### install & build repo
+一定要加 --recursive
+``` bash
+$ git clone --recursive https://github.com/nvlabs/instant-ngp
+$ cd instant-ngp
+```
+
+進入根目錄後編譯專案
+``` bash
+instant-ngp$ cmake . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
+instant-ngp$ cmake --build build --config RelWithDebInfo -j
+```
+
+下載[COLMAP](https://github.com/colmap/colmap/releases/tag/3.7)放到根目錄下 (e.g COLMAP-3.7-windows-cuda.zip)
+``` bash
+./instant-ngp/COLMAP
+```
+
+安裝虛擬環境
+```
+conda create -n ngp python=3.9
+conda activate ngp
+pip install -r requirements.txt
+```
+
+### run repo
+``` bash
+instant-ngp$ ./instant-ngp data/nerf/fox
+```
+如果會失敗，可以只打前面，先叫出GUI，再把`data/nerf/fox`資料夾拖曳到GUI上
+``` bash
+instant-ngp$ ./instant-ngp 
+```
+
+---
+
 # Instant Neural Graphics Primitives ![](https://github.com/NVlabs/instant-ngp/workflows/CI/badge.svg)
 
 <img src="docs/assets_readme/fox.gif" height="342"/> <img src="docs/assets_readme/robot5.gif" height="342"/>
